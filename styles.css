@@ -13,3 +13,13 @@
 .addon-choice-row button.selected small{color:#e7ba87}
 .addon-box[hidden]{display:none!important}
 @media(max-width:520px){.addon-choice-row{grid-template-columns:1fr}}
+/* Service customization popup */
+.service-options-modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:20px;background:rgba(25,19,14,.72);backdrop-filter:blur(5px)}
+.service-options-card{position:relative;width:min(760px,100%);max-height:88vh;overflow:auto;background:#fffaf4;color:var(--ink);padding:clamp(24px,4vw,42px);box-shadow:0 28px 90px #0006}
+.service-options-card h3{font:600 clamp(34px,5vw,50px)/1 "Cormorant Garamond",serif;margin:8px 45px 24px 0}
+.service-options-close{position:absolute;right:18px;top:14px;width:42px;height:42px;border:1px solid #ccbfb2;border-radius:50%;background:#fff;font-size:26px;cursor:pointer}
+.service-options-card .price-note{margin-bottom:18px}
+.service-options-card .addon-box{margin-top:14px;padding:20px;border:1px solid #d9c8b6;background:#fff}
+.service-options-card .save-service-options{width:100%;margin-top:22px}
+.addon-choice-row.single{grid-template-columns:1fr}
+@media(max-width:620px){.service-options-modal{padding:10px}.service-options-card{max-height:94vh;padding:24px 18px}.service-options-card .split{grid-template-columns:1fr}.colour-options{grid-template-columns:repeat(2,1fr)}}
