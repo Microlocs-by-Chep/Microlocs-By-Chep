@@ -56,3 +56,16 @@ body.modal-open{overflow:hidden}
 .faq-list details[open] summary::after{content:"−"}
 .faq-list p{margin:0;padding:0 50px 22px 0;line-height:1.7;color:#554a41}
 @media(max-width:820px){.booking-modal{padding:10px}.booking-modal-card{max-height:95vh;padding:24px 18px}.booking-modal .service-options{grid-template-columns:1fr}.faq-wrap{display:block}.faq-list{margin-top:28px}}
+/* Photo-first service cards */
+#book{display:none!important}
+#services .cards article{min-height:535px;padding:305px 26px 26px;background-color:#fff;background-size:100% 280px;background-position:center top;background-repeat:no-repeat;color:var(--ink);border:1px solid #e2d7cc;box-shadow:0 16px 38px #211a1418}
+#services .cards article::before{display:none}
+#services .cards article::after{display:none}
+#services .cards article>small:first-child{position:absolute;top:18px;left:18px;z-index:2;background:#fff;color:var(--ink);border-color:#fff;box-shadow:0 4px 16px #0003}
+#services .cards h3{margin:0 0 12px;color:var(--ink);text-shadow:none}
+#services .cards p{margin:0 0 22px;padding:0;color:#443930;background:none;max-width:none;line-height:1.6}
+#services .cards p b{color:var(--ink)}
+#services .cards button{margin-top:auto;padding:14px 16px;background:var(--ink);color:#fff;border:0;text-align:center}
+#services .cards button:hover{background:var(--gold);color:#fff}
+#services .cards button::after{color:inherit}
+@media(max-width:820px){#services .cards article{min-height:510px;padding-top:290px;background-size:100% 265px}}
