@@ -23,3 +23,11 @@
 .service-options-card .save-service-options{width:100%;margin-top:22px}
 .addon-choice-row.single{grid-template-columns:1fr}
 @media(max-width:620px){.service-options-modal{padding:10px}.service-options-card{max-height:94vh;padding:24px 18px}.service-options-card .split{grid-template-columns:1fr}.colour-options{grid-template-columns:repeat(2,1fr)}}
+/* Customer appointment history */
+.customer-profile{margin-top:8px;padding-top:20px;border-top:1px solid #ccbfb2}
+.customer-profile h3{font:600 30px/1.1 "Cormorant Garamond",serif;margin:0 0 10px}
+.history-list{list-style:none;margin:18px 0;padding:0;display:grid;gap:9px}
+.history-list li{display:flex;justify-content:space-between;gap:18px;padding:13px;background:#fff;border-left:3px solid var(--gold)}
+.history-list li span{color:#665;text-align:right}
+.history-list .empty-history{display:block;color:#665}
+@media(max-width:520px){.history-list li{display:grid}.history-list li span{text-align:left}}
