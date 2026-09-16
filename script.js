@@ -10,7 +10,7 @@ const openBooking=()=>{bookingShell.hidden=false;document.body.classList.add("mo
 const closeBooking=()=>{bookingShell.hidden=true;document.body.classList.remove("modal-open")};
 bookingShell.querySelector(".booking-modal-close").onclick=closeBooking;
 bookingShell.onclick=e=>{if(e.target===bookingShell)closeBooking()};
-bookCta.onclick=e=>{e.preventDefault();openBooking()};
+bookCta.onclick=e=>{e.preventDefault();openBooking()};$$(`a[href="#book"]`).forEach(link=>link.onclick=e=>{e.preventDefault();openBooking()});
 $("#book").remove();
 const faq=document.createElement("section");
 faq.className="section faq-section";
