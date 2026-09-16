@@ -109,3 +109,15 @@ body.modal-open{overflow:hidden}
  .carousel{grid-auto-columns:88%}.client-card{height:480px;background-size:contain;background-repeat:no-repeat}
  .floating{right:12px;bottom:12px;padding:13px 16px;font-size:14px}
 }
+/* Easy-scroll mobile services */
+@media(max-width:620px){
+ #services .shell>h2{max-width:11ch;margin-bottom:28px;font-size:40px}
+ #services .cards{display:grid;grid-template-columns:1fr;overflow:visible;gap:22px;margin:0;padding:0}
+ #services .cards article{width:100%;min-width:0;scroll-snap-align:none;border-radius:16px}
+ #services .service-photo{aspect-ratio:1/1;background-size:contain;background-color:#eadfd3}
+ #services .service-card-content{min-height:0;padding:22px}
+ #services .service-card-content>small{margin-bottom:12px}
+ #services .service-card-content h3{font-size:31px;line-height:1;margin-bottom:12px}
+ #services .service-card-content p{font-size:15px;line-height:1.55;margin-bottom:20px}
+ #services .service-card-content button{min-height:52px;margin-top:0}
+}
