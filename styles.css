@@ -244,3 +244,4 @@ img,video,iframe{max-width:100%}
 @media(max-width:1050px){#services .cards article{flex-basis:calc((100% - 40px)/3)}}
 @media(max-width:760px){#services .cards article{flex-basis:62%}#services .service-card-content{min-height:225px;padding:16px}#services .service-card-content h3{font-size:24px}#services .service-card-content p{font-size:12.5px}#services .service-price{font-size:16px!important}}
 @media(max-width:420px){#services .cards article{flex-basis:68%}}
+\n.hero .eyebrow{display:none}\n
