@@ -161,3 +161,11 @@ body.modal-open{overflow:hidden}
 .save-service-options{min-height:52px;cursor:pointer}
 .service-options-close{cursor:pointer;pointer-events:auto}
 @media(max-width:620px){.addon-tick{min-height:62px}.save-service-options{position:sticky;bottom:0;z-index:3}}
+/* Live booking totals */
+.booking-estimate,.booking-total{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;background:var(--ink);color:#fff}
+.booking-estimate{margin-top:18px;flex-wrap:wrap}
+.booking-estimate span,.booking-total span{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#e7ba87}
+.booking-estimate strong,.booking-total strong{font-size:20px;text-align:right}
+.booking-estimate small{flex-basis:100%;color:#d8cec3}
+.booking-total{margin-top:6px}
+@media(max-width:620px){.booking-estimate,.booking-total{display:grid;gap:6px}.booking-estimate strong,.booking-total strong{text-align:left;font-size:19px}}
