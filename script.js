@@ -27,25 +27,24 @@ let chosenService="",chosenEmployee="",chosenDuration=0,chosenTime="";const book
 const colourPicker=`<p>Estimated add-on: KSh 3,000–6,000. Choose a preferred colour.</p><div class="colour-options">${colours.map(([name,value])=>`<label class="colour-choice" style="--swatch:${value}"><input type="radio" name="colour" value="${name}"><span></span><small>${name}</small></label>`).join("")}</div>`;
 if(chosenService==="Consultation"){
 serviceDetails.hidden=true;
+serviceDetails.style.display="none";
 serviceDetails.innerHTML="";
 return;
 }
 serviceDetails.hidden=false;
-const installationOptions=`<p class="price-note"><strong>Installation estimate</strong><br>Short, light-volume hair: KSh 10,000–15,000<br>Long, full-volume hair: KSh 15,000–20,000</p><div class="split"><label>Hair length<select name="hairLength" required><option value="">Choose length</option><option>Short</option><option>Medium</option><option>Long</option></select></label><label>Hair volume<select name="hairVolume" required><option value="">Choose volume</option><option>Light / not bulky</option><option>Medium</option><option>Full / bulky</option></select></label></div><p class="addon-prompt">Optional add-ons</p><div class="addon-choice-row"><button type="button" data-addon-toggle="extensions" aria-expanded="false">Add microloc extensions <small>KSh 25,000–30,000</small></button><button type="button" data-addon-toggle="colouring" aria-expanded="false">Add loc colouring <small>Estimated KSh 3,000–6,000</small></button></div><div class="addon-box" data-addon-panel="extensions" hidden><strong>Microloc extensions</strong><p>Price depends on inches and volume.</p><div class="split"><label>Extension length<select name="extensionInches"><option value="">Choose length</option><option>8 inches</option><option>10 inches</option><option>12 inches</option><option>14 inches</option><option>16 inches</option><option>18 inches</option><option>20 inches</option><option>22 inches</option><option>24 inches</option></select></label><label>Extension volume<select name="extensionVolume"><option value="">Choose volume</option><option>Light</option><option>Medium</option><option>Full / bulky</option></select></label></div></div><div class="addon-box" data-addon-panel="colouring" hidden><strong>Loc colouring</strong>${colourPicker}</div>`;
-const retieOptions=`<p class="price-note"><strong>Retie appointment: 3 hours</strong></p><p class="addon-prompt">Optional add-on</p><div class="addon-choice-row single"><button type="button" data-addon-toggle="colouring" aria-expanded="false">Add loc colouring <small>Estimated KSh 3,000–6,000</small></button></div><div class="addon-box" data-addon-panel="colouring" hidden><strong>Loc colouring</strong>${colourPicker}</div>`;
+serviceDetails.style.display="";
+const installationOptions=`<p class="price-note"><strong>Installation estimate</strong><br>Short, light-volume hair: KSh 10,000–15,000<br>Long, full-volume hair: KSh 15,000–20,000</p><div class="split"><label>Hair length<select name="hairLength" required><option value="">Choose length</option><option>Short</option><option>Medium</option><option>Long</option></select></label><label>Hair volume<select name="hairVolume" required><option value="">Choose volume</option><option>Light / not bulky</option><option>Medium</option><option>Full / bulky</option></select></label></div><p class="addon-prompt">Optional add-ons</p><div class="addon-choice-row"><label class="addon-tick"><input type="checkbox" data-addon-toggle="extensions"><span class="addon-check">✓</span><span>Add microloc extensions <small>KSh 25,000–30,000</small></span></label><label class="addon-tick"><input type="checkbox" data-addon-toggle="colouring"><span class="addon-check">✓</span><span>Add loc colouring <small>Estimated KSh 3,000–6,000</small></span></label></div><div class="addon-box" data-addon-panel="extensions" hidden><strong>Microloc extensions</strong><p>Price depends on inches and volume.</p><div class="split"><label>Extension length<select name="extensionInches"><option value="">Choose length</option><option>8 inches</option><option>10 inches</option><option>12 inches</option><option>14 inches</option><option>16 inches</option><option>18 inches</option><option>20 inches</option><option>22 inches</option><option>24 inches</option></select></label><label>Extension volume<select name="extensionVolume"><option value="">Choose volume</option><option>Light</option><option>Medium</option><option>Full / bulky</option></select></label></div></div><div class="addon-box" data-addon-panel="colouring" hidden><strong>Loc colouring</strong>${colourPicker}</div>`;
+const retieOptions=`<p class="price-note"><strong>Retie appointment: 3 hours</strong></p><p class="addon-prompt">Optional add-on</p><div class="addon-choice-row single"><label class="addon-tick"><input type="checkbox" data-addon-toggle="colouring"><span class="addon-check">✓</span><span>Add loc colouring <small>Estimated KSh 3,000–6,000</small></span></label></div><div class="addon-box" data-addon-panel="colouring" hidden><strong>Loc colouring</strong>${colourPicker}</div>`;
 serviceDetails.innerHTML=`<div class="service-options-modal" role="dialog" aria-modal="true" aria-labelledby="serviceOptionsTitle"><div class="service-options-card"><button type="button" class="service-options-close" aria-label="Close">×</button><p class="eyebrow">CUSTOMIZE YOUR APPOINTMENT</p><h3 id="serviceOptionsTitle">${chosenService==="Installation"?"Fresh installation":"Retie & maintenance"}</h3>${chosenService==="Installation"?installationOptions:retieOptions}<button type="button" class="button gold save-service-options">Save choices and continue</button></div></div>`;
-$$("[data-addon-toggle]",serviceDetails).forEach(button=>button.onclick=()=>{
-const panel=$(`[data-addon-panel="${button.dataset.addonToggle}"]`,serviceDetails);
-const opening=panel.hidden;
-panel.hidden=!opening;
-button.classList.toggle("selected",opening);
-button.setAttribute("aria-expanded",String(opening));
-if(!opening){
-panel.querySelectorAll('input[type="radio"]').forEach(input=>input.checked=false);
+$$("[data-addon-toggle]",serviceDetails).forEach(input=>input.onchange=()=>{
+const panel=$(`[data-addon-panel="${input.dataset.addonToggle}"]`,serviceDetails);
+panel.hidden=!input.checked;
+if(!input.checked){
+panel.querySelectorAll('input[type="radio"]').forEach(option=>option.checked=false);
 panel.querySelectorAll("select").forEach(select=>select.value="");
 }
 });
-const closeOptions=()=>{serviceDetails.hidden=true};
+const closeOptions=()=>{serviceDetails.hidden=true;serviceDetails.style.display="none"};
 $(".service-options-close",serviceDetails).onclick=closeOptions;
 $(".save-service-options",serviceDetails).onclick=closeOptions;
 $(".service-options-modal",serviceDetails).onclick=e=>{if(e.target===e.currentTarget)closeOptions()};
