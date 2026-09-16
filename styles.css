@@ -201,3 +201,14 @@ body.modal-open{overflow:hidden}
 .contact-phone{text-decoration:underline;text-underline-offset:4px}
 @media(max-width:1050px){.contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.contact-hub{padding:58px 0}.contact-grid{grid-template-columns:1fr;gap:38px}.contact-brand img{width:245px}.map-link{min-height:190px}}
+/* Filled images and About Us */
+.banner,#services .service-photo,.client-card,.about-photo{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.about-section{background:#fff}
+.about-grid{display:grid;grid-template-columns:minmax(320px,.9fr) minmax(0,1.1fr);gap:clamp(42px,7vw,110px);align-items:center}
+.about-photo{min-height:590px;background-image:url("assets/microlocs-banner-5.webp");background-color:#eadfd3;border-radius:22px}
+.about-copy{max-width:700px}
+.about-copy h2{margin-top:14px}
+.about-copy p{font-size:17px;line-height:1.75;color:#51463d}
+.about-copy .button{margin-top:12px}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr}.about-photo{min-height:500px;order:2}.about-copy{order:1}}
+@media(max-width:620px){.banner,#services .service-photo,.client-card,.about-photo{background-size:cover!important}.about-section{padding:64px 0}.about-photo{min-height:420px;border-radius:16px}.about-copy h2{font-size:40px}.about-copy p{font-size:15px}.about-copy .button{width:100%}}
