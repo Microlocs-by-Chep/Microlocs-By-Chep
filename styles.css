@@ -120,3 +120,14 @@ body.modal-open{overflow:hidden}
  #services .service-card-content p{font-size:14px;line-height:1.5;margin-bottom:18px}
  #services .service-card-content button{min-height:48px}
 }
+/* Phone service size and clean text */
+#services .service-card-content,#services .service-card-content *{text-shadow:none!important;filter:none!important}
+@media(max-width:620px){
+ #services .cards article{flex-basis:74%;border-radius:14px;box-shadow:none}
+ #services .service-photo{aspect-ratio:1/1}
+ #services .service-card-content{min-height:235px;padding:17px}
+ #services .service-card-content>small{width:32px;height:32px;margin-bottom:9px;font-size:12px}
+ #services .service-card-content h3{font-size:26px;line-height:1;margin-bottom:9px}
+ #services .service-card-content p{font-size:13px;line-height:1.42;margin-bottom:14px}
+ #services .service-card-content button{min-height:44px;padding:11px 13px;font-size:13px}
+}
