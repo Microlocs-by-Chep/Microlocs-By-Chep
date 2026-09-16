@@ -74,7 +74,7 @@ if(popupTotal)popupTotal.querySelector("strong").textContent=note;
 const finalTotal=$("#bookingTotal");
 if(finalTotal)finalTotal.querySelector("strong").textContent=note;
 };
-$("select,input",serviceDetails).forEach(control=>control.addEventListener("change",updateEstimate));
+$$("select,input",serviceDetails).forEach(control=>control.addEventListener("change",updateEstimate));
 updateEstimate();
 const closeOptions=()=>{serviceDetails.hidden=true;serviceDetails.style.display="none"};
 $(".service-options-close",serviceDetails).onclick=closeOptions;
