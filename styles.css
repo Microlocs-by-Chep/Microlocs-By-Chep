@@ -150,3 +150,14 @@ body.modal-open{overflow:hidden}
 .journey-footer p{line-height:1.7;margin:0 auto 22px;color:#eee3d8}
 @media(max-width:900px){.journey-header{display:block}.journey-header>p:not(.eyebrow){font-size:16px}.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.journey-article{padding:68px 0}.journey-header{margin-bottom:32px}.journey-header h2{font-size:40px}.journey-header .journey-lead{font-size:18px!important}.journey-stages{grid-template-columns:1fr;gap:12px}.journey-stages section{padding:22px}.journey-stages h3{font-size:28px}.journey-footer{margin-top:30px;padding:28px 20px}.journey-footer .button{width:100%}}
+/* Tickable booking add-ons */
+.service-details[hidden]{display:none!important}
+.addon-tick{position:relative;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:12px;min-height:66px;padding:14px;border:1px solid #ccbfb2;background:#fff;cursor:pointer;font-size:15px}
+.addon-tick input{position:absolute;opacity:0;pointer-events:none}
+.addon-check{display:grid;place-items:center;width:26px;height:26px;border:2px solid #bba895;border-radius:6px;color:transparent;font-weight:800}
+.addon-tick small{display:block;margin-top:4px;color:#766;font-weight:500}
+.addon-tick:has(input:checked){border-color:var(--gold);background:var(--cream);outline:2px solid var(--gold);outline-offset:-2px}
+.addon-tick:has(input:checked) .addon-check{border-color:var(--gold);background:var(--gold);color:#fff}
+.save-service-options{min-height:52px;cursor:pointer}
+.service-options-close{cursor:pointer;pointer-events:auto}
+@media(max-width:620px){.addon-tick{min-height:62px}.save-service-options{position:sticky;bottom:0;z-index:3}}
