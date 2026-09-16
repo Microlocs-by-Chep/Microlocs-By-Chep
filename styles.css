@@ -169,3 +169,14 @@ body.modal-open{overflow:hidden}
 .booking-estimate small{flex-basis:100%;color:#d8cec3}
 .booking-total{margin-top:6px}
 @media(max-width:620px){.booking-estimate,.booking-total{display:grid;gap:6px}.booking-estimate strong,.booking-total strong{text-align:left;font-size:19px}}
+/* Added services and article reveal */
+#services .service-photo-microtwists{background-image:url("assets/microlocs-banner-3.webp")}
+#services .service-photo-microbraiding{background-image:url("assets/microlocs-banner-5.webp")}
+#services .service-price{margin-top:auto!important;color:var(--gold)!important;font-size:20px!important;font-weight:700}
+#services .service-price small{display:block;margin-top:3px;color:#6a5a4c;font-size:12px;font-weight:600}
+.journey-read-more{grid-column:2;justify-self:start;margin-top:10px}
+.journey-article.collapsed .journey-header>p:not(.eyebrow):not(.journey-lead),.journey-article.collapsed .journey-stages,.journey-article.collapsed .journey-footer{display:none}
+.journey-article.collapsed .journey-header{margin-bottom:0}
+.journey-article.expanded .journey-read-more{margin-bottom:30px}
+@media(max-width:900px){.journey-read-more{margin-top:18px}}
+@media(max-width:620px){#services .service-price{font-size:18px!important}.journey-read-more{width:100%}}
