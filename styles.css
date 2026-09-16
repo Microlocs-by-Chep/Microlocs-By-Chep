@@ -218,3 +218,19 @@ main,header,footer,section{max-width:100%;overflow-x:clip}
 img,video,iframe{max-width:100%}
 @supports(overflow:clip){html,body{overflow-x:clip}}
 @media(max-width:620px){.shell{max-width:100%}.hero-grid,.about-grid,.booking,.account,.contact-grid,.faq-wrap,.journey-wrap{min-width:0}.carousel-wrap{max-width:100%}#services .cards,.carousel{overscroll-behavior-x:contain}}
+/* Single footer, About popup and service carousel */
+#services .cards{display:flex!important;grid-template-columns:none!important;overflow-x:auto;gap:20px;padding:8px 4px 24px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+#services .cards::-webkit-scrollbar{display:none}
+#services .cards article{flex:0 0 calc((100% - 40px)/3);scroll-snap-align:start}
+.service-carousel-controls{display:flex;justify-content:flex-end;gap:10px;margin:-58px 0 24px}
+.service-carousel-controls button{display:grid;place-items:center;width:46px;height:46px;border:1px solid #cdbdab;border-radius:50%;background:#fff;color:var(--ink);font-size:29px;cursor:pointer}
+.service-carousel-controls button:hover{background:var(--ink);color:#fff}
+.about-section[hidden]{display:none!important}
+.about-section{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:24px;background:rgba(25,19,14,.76);backdrop-filter:blur(6px)}
+.about-modal-card{position:relative;display:grid;grid-template-columns:minmax(300px,.9fr) minmax(0,1.1fr);width:min(1100px,100%);max-height:90vh;overflow:auto;background:#fff;color:var(--ink);box-shadow:0 30px 90px #0008}
+.about-modal-card .about-photo{min-height:650px;border-radius:0}
+.about-modal-card .about-copy{padding:clamp(32px,5vw,70px);align-self:center}
+.about-close{position:absolute;right:18px;top:18px;z-index:2;width:44px;height:44px;border:0;border-radius:50%;background:var(--ink);color:#fff;font-size:28px;cursor:pointer}
+.contact-hub{display:block;min-height:0}
+@media(max-width:1050px){#services .cards article{flex-basis:calc((100% - 20px)/2)}}
+@media(max-width:620px){#services .cards{margin-inline:-18px;padding:4px 18px 20px;gap:14px}#services .cards article{flex-basis:74%}.service-carousel-controls{margin:-48px 0 18px}.service-carousel-controls button{width:40px;height:40px}.about-section{padding:0;place-items:end center}.about-modal-card{grid-template-columns:1fr;width:100%;height:100dvh;max-height:none}.about-modal-card .about-photo{min-height:42vh}.about-modal-card .about-copy{padding:28px 20px 40px}.about-close{position:fixed;right:15px;top:14px}}
