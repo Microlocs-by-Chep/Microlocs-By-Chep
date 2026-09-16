@@ -212,3 +212,9 @@ body.modal-open{overflow:hidden}
 .about-copy .button{margin-top:12px}
 @media(max-width:820px){.about-grid{grid-template-columns:1fr}.about-photo{min-height:500px;order:2}.about-copy{order:1}}
 @media(max-width:620px){.banner,#services .service-photo,.client-card,.about-photo{background-size:cover!important}.about-section{padding:64px 0}.about-photo{min-height:420px;border-radius:16px}.about-copy h2{font-size:40px}.about-copy p{font-size:15px}.about-copy .button{width:100%}}
+/* Prevent accidental page-side scrolling */
+html,body{width:100%;max-width:100%;overflow-x:hidden;overscroll-behavior-x:none}
+main,header,footer,section{max-width:100%;overflow-x:clip}
+img,video,iframe{max-width:100%}
+@supports(overflow:clip){html,body{overflow-x:clip}}
+@media(max-width:620px){.shell{max-width:100%}.hero-grid,.about-grid,.booking,.account,.contact-grid,.faq-wrap,.journey-wrap{min-width:0}.carousel-wrap{max-width:100%}#services .cards,.carousel{overscroll-behavior-x:contain}}
