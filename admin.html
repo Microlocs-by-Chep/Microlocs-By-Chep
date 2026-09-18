@@ -1,20 +1,14 @@
 <!doctype html>
-<html lang="en-KE">
-<head>
- <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
- <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#201912">
- <title>Admin | Microlocs by Chep</title>
- <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="admin.css">
-</head>
+<html lang="en-KE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#201912"><link rel="stylesheet" href="admin-extra.css">
+<title>Microlocs by Chep Admin Page</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="admin.css"></head>
 <body><main class="admin-shell">
- <header class="admin-header"><a href="/"><img src="assets/microlocs-logo-transparent.png" alt="Microlocs by Chep"></a><button id="signOut" class="text-button" hidden>Sign out</button></header>
- <section id="loginView" class="login-card"><p class="eyebrow">SECURE ADMIN</p><h1>Weekly commissions</h1><p>Sign in with your approved Microlocs admin email and password.</p><form id="loginForm"><label>Email<input name="email" type="email" autocomplete="username" required></label><label>Password<input name="password" type="password" minlength="6" autocomplete="current-password" required></label><button type="submit">Sign in</button><p id="loginMessage" class="message" aria-live="polite"></p></form></section>
- <section id="dashboard" hidden>
-  <div class="title-row"><div><p class="eyebrow">MICROLOCS ADMIN</p><h1>Commission dashboard</h1><p id="adminEmail"></p></div><div class="week-picker"><button id="previousWeek" aria-label="Previous week">←</button><div><small>Monday–Saturday</small><strong id="weekLabel"></strong></div><button id="nextWeek" aria-label="Next week">→</button></div></div>
-  <div class="actions"><button id="importCalendar">Import completed calendar jobs</button><a class="calendar-link" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener">Open Google Calendar ↗</a><span id="syncMessage" class="message" aria-live="polite"></span></div>
-  <div class="summary-grid" id="summaryGrid"></div>
-  <div class="jobs-card"><div class="jobs-heading"><div><h2>Completed calendar jobs</h2><p>All completed Bree and Joan bookings for this week. Enter the final amount paid; commission is calculated automatically at 40%.</p></div><span id="jobCount"></span></div><div id="jobsTable"></div></div>
-  <div class="history-card"><h2>All saved weekly records</h2><p>Earlier weeks remain saved and can be reopened below.</p><div id="historyList"></div></div>
- </section>
-</main><script src="admin.js"></script></body></html>
+<header class="admin-header"><a href="/"><img src="assets/microlocs-logo-transparent.png" alt="Microlocs by Chep"></a><button id="signOut" class="text-button" hidden>Sign out</button></header>
+<section id="loginView" class="login-card"><p class="eyebrow">SECURE ADMIN</p><h1>Microlocs by Chep Admin Page</h1><p>Sign in with your approved Microlocs admin email and password.</p><form id="loginForm"><label>Email<input name="email" type="email" autocomplete="username" required></label><label>Password<input name="password" type="password" minlength="6" autocomplete="current-password" required></label><button type="submit">Sign in</button><p id="loginMessage" class="message" aria-live="polite"></p></form></section>
+<section id="dashboard" hidden>
+ <div class="title-row"><div><p class="eyebrow">SECURE MANAGEMENT</p><h1>Microlocs by Chep Admin Page</h1><p id="adminEmail"></p></div><div class="week-picker"><button id="previousWeek" aria-label="Previous week">←</button><div><small>Monday–Saturday</small><strong id="weekLabel"></strong></div><button id="nextWeek" aria-label="Next week">→</button></div></div>
+ <div class="actions"><button id="importCalendar">Refresh this week’s bookings</button><span id="syncMessage" class="message" aria-live="polite"></span></div>
+ <div class="jobs-card calendar-card"><div class="jobs-heading"><div><h2>This week’s calendar</h2><p>All bookings from Monday through Saturday are shown here automatically.</p></div></div><div id="weeklyCalendar"></div></div>
+ <div class="summary-grid" id="summaryGrid"></div>
+ <div class="jobs-card"><div class="jobs-heading"><div><h2>Jobs completed this week</h2><p>All completed bookings, including unassigned jobs. Select Bree or Joan, enter the final amount paid, and the 40% commission is calculated automatically.</p></div><span id="jobCount"></span></div><div id="jobsTable"></div></div>
+ <div class="history-card"><h2>All saved weekly records</h2><p>Earlier weeks remain saved and can be reopened below.</p><div id="historyList"></div></div>
+</section></main><script src="admin.js"></script></body></html>

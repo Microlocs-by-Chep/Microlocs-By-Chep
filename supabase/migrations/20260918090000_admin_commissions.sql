@@ -9,9 +9,12 @@ create table if not exists public.admin_users (
 create table if not exists public.commission_jobs (
   id uuid primary key default gen_random_uuid(),
   calendar_event_id text not null unique,
-  worker text not null check (worker in ('Bree', 'Joan')),
+  worker text not null default 'Unassigned' check (worker in ('Unassigned', 'Bree', 'Joan')),
   customer_name text not null default 'Calendar appointment',
   service text not null default 'Appointment',
+  customer_phone text not null default '',
+  customer_email text not null default '',
+  booking_notes text not null default '',
   completed_at timestamptz not null,
   week_start date not null,
   week_end date not null,
@@ -99,4 +102,3 @@ with check ((select private.is_admin()));
 revoke all on public.admin_users, public.commission_jobs from anon;
 grant select on public.admin_users to authenticated;
 grant select, insert, update on public.commission_jobs to authenticated;
-
