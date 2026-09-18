@@ -124,3 +124,11 @@ renderHistory();
 const saved=JSON.parse(localStorage.getItem("microlocsAccount")||"null");
 if(saved)Object.entries(saved).forEach(([k,v])=>{if(accountForm.elements[k])accountForm.elements[k].value=v});
 renderHistory();
+// Replace the approved local gallery with the latest Instagram posts when the account is connected.
+fetch("/api/instagram")
+ .then(response=>response.ok?response.json():Promise.reject())
+ .then(data=>{
+  if(!data.posts?.length)return;
+  clientCarousel.innerHTML=data.posts.map(post=>`<div class="client-card" style="background-image:url('${post.url}')"><span>${post.caption||"Microlocs by Chep"} · <a href="${post.permalink}" target="_blank" rel="noopener">Instagram ↗</a></span></div>`).join("");
+ })
+ .catch(()=>{});
