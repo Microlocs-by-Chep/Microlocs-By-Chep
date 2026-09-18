@@ -3,7 +3,7 @@ module.exports=async(req,res)=>{
  if(req.method!=="POST")return res.status(405).json({error:"Method not allowed"});
  try{
   const {name,phone,notes="",service,employee,duration,start,hairLength="",hairVolume="",extensionInches="",extensionVolume="",colour=""}=req.body||{},hours=Number(duration);
-  if(!name||!phone||!["Retie","Installation","Consultation"].includes(service)||!["Bree","Joan","Chep"].includes(employee)||![1,3,6].includes(hours)||!start)return res.status(400).json({error:"Complete all booking details"});
+  if(!name||!phone||!["Retie","Installation","Microtwists","Microbraiding","Consultation"].includes(service)||!["Bree","Joan","Chep"].includes(employee)||![1,3,6,8].includes(hours)||!start)return res.status(400).json({error:"Complete all booking details"});
   const begins=new Date(start),ends=new Date(begins.getTime()+hours*3600000);
   if(!Number.isFinite(begins.getTime())||begins<Date.now())return res.status(400).json({error:"Choose a future appointment"});
   const events=await eventsBetween(begins.toISOString(),ends.toISOString()),busy=events.filter(event=>{const assigned=event.extendedProperties?.private?.employee;return overlaps(event,begins,ends)&&(!assigned||assigned===employee)}).length;
