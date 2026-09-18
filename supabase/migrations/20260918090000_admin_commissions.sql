@@ -25,6 +25,7 @@ create table if not exists public.commission_jobs (
   created_by uuid not null default auth.uid() references auth.users(id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
+  week_saved_at timestamptz,
   constraint valid_week check (week_end = week_start + 5),
   constraint paid_state check ((not is_paid and paid_at is null) or (is_paid and paid_at is not null))
 );

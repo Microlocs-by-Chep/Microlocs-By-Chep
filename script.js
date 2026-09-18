@@ -133,3 +133,4 @@ fetch("/api/instagram")
   clientCarousel.innerHTML=data.posts.map(post=>`<div class="client-card" style="background-image:url('${post.url}')"><span>${post.caption||"Microlocs by Chep"} · <a href="${post.permalink}" target="_blank" rel="noopener">Instagram ↗</a></span></div>`).join("");
  })
  .catch(()=>{});
+const customerAccountStyles=document.createElement("link");customerAccountStyles.rel="stylesheet";customerAccountStyles.href="customer-account.css";document.head.appendChild(customerAccountStyles);const customerAccountScript=document.createElement("script");customerAccountScript.src="customer-account.js";document.body.appendChild(customerAccountScript);
