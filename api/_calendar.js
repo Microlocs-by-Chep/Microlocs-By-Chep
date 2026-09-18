@@ -27,7 +27,13 @@ const assignedEmployee=event=>{
 async function createEvent(event){
  const token=await accessToken(),url=new URL("https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(CALENDAR_ID)+"/events");
  url.searchParams.set("sendUpdates","all");
- const response=await fetch(url,{method:"POST",headers:{Authorization:"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify(event)}),data=await response.json();
- if(!response.ok)throw new Error(data.error?.message||"Could not create calendar booking");return data;
+ let response=await fetch(url,{method:"POST",headers:{Authorization:"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify(event)}),data=await response.json();
+ if(!response.ok&&/Service accounts cannot invite attendees/i.test(data.error?.message||"")){
+  const calendarOnly={...event};delete calendarOnly.attendees;
+  url.searchParams.set("sendUpdates","none");
+  response=await fetch(url,{method:"POST",headers:{Authorization:"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify(calendarOnly)});data=await response.json();
+  if(response.ok)return {...data,invitationSent:false};
+ }
+ if(!response.ok)throw new Error(data.error?.message||"Could not create calendar booking");return {...data,invitationSent:Boolean(event.attendees?.length)};
 }
 module.exports={eventsBetween,overlaps,assignedEmployee,createEvent};
