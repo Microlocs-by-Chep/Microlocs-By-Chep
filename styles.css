@@ -64,6 +64,7 @@ body.modal-open{overflow:hidden}
 #services .cards article>small:first-child{position:absolute;top:18px;left:18px;z-index:2;background:#fff;color:var(--ink);border-color:#fff;box-shadow:0 4px 16px #0003}
 #services .cards h3{margin:0 0 12px;color:var(--ink);text-shadow:none}
 #services .cards p{margin:0 0 22px;padding:0;color:#443930;background:none;max-width:none;line-height:1.6}
+#services .service-card-content p{border-left:0;text-shadow:none}
 #services .cards p b{color:var(--ink)}
 #services .cards button{margin-top:auto;padding:14px 16px;background:var(--ink);color:#fff;border:0;text-align:center}
 #services .cards button:hover{background:var(--gold);color:#fff}
@@ -178,6 +179,11 @@ body.modal-open{overflow:hidden}
 .journey-article.collapsed .journey-header>p:not(.eyebrow):not(.journey-lead),.journey-article.collapsed .journey-stages,.journey-article.collapsed .journey-footer{display:none}
 .journey-article.collapsed .journey-header{margin-bottom:0}
 .journey-article.expanded .journey-read-more{margin-bottom:30px}
+.guide-open{overflow:hidden}
+.journey-article.expanded{position:fixed;inset:0;z-index:1000;overflow-y:auto;overscroll-behavior:contain;padding:clamp(18px,4vw,54px);background:rgba(24,18,14,.88);backdrop-filter:blur(10px)}
+.journey-article.expanded .journey-wrap{max-width:1180px;margin:auto;padding:clamp(28px,5vw,70px);background:#fff;border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.35)}
+.journey-article.expanded .journey-read-more{position:sticky;top:0;z-index:2;width:auto;margin:10px 0 30px;box-shadow:0 8px 24px rgba(33,26,20,.18)}
+@media(max-width:620px){.journey-article.expanded{padding:0;background:#fff;backdrop-filter:none}.journey-article.expanded .journey-wrap{min-height:100%;padding:72px 20px 38px;border-radius:0;box-shadow:none}.journey-article.expanded .journey-read-more{width:100%;top:10px}}
 @media(max-width:900px){.journey-read-more{margin-top:18px}}
 @media(max-width:620px){#services .service-price{font-size:18px!important}.journey-read-more{width:100%}}
 /* Contact, location and house calls */
@@ -246,3 +252,5 @@ img,video,iframe{max-width:100%}
 @media(max-width:420px){#services .cards article{flex-basis:68%}}
 \n.hero .eyebrow{display:none}\n
 .next-retie-card{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.15rem;padding:1rem 1.15rem;background:#201912;color:#fff;border-left:4px solid #c27c34}.next-retie-card span{font-size:.9rem;letter-spacing:.04em}.next-retie-card strong{font-family:"Cormorant Garamond",serif;font-size:1.45rem;color:#efbd84}.customer-profile h4{margin:.5rem 0 .8rem;font-size:1rem}@media(max-width:600px){.next-retie-card{align-items:flex-start;flex-direction:column}.next-retie-card strong{font-size:1.3rem}}
+
+.footer-contact-line{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.footer-contact-line a{display:inline!important;margin:0!important;color:#e7ba87!important;text-decoration:underline;text-underline-offset:3px}
