@@ -1,0 +1,4 @@
+.remember-account{display:flex!important;flex-direction:row!important;align-items:center;gap:9px;font-size:14px}
+.remember-account input{width:auto!important}
+.delete-booking{margin-top:8px;border:1px solid #b54a3d;background:transparent;color:#a33b30;border-radius:7px;padding:6px 8px;font-size:12px;font-weight:700;cursor:pointer}
+.delete-booking:disabled{opacity:.55;cursor:wait}

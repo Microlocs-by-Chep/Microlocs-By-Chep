@@ -36,4 +36,11 @@ async function createEvent(event){
  }
  if(!response.ok)throw new Error(data.error?.message||"Could not create calendar booking");return {...data,invitationSent:Boolean(event.attendees?.length)};
 }
-module.exports={eventsBetween,overlaps,assignedEmployee,createEvent};
+async function deleteEvent(eventId){
+ const token=await accessToken(),url=new URL("https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(CALENDAR_ID)+"/events/"+encodeURIComponent(eventId));
+ url.searchParams.set("sendUpdates","all");
+ const response=await fetch(url,{method:"DELETE",headers:{Authorization:"Bearer "+token}});
+ if(!response.ok&&response.status!==404){const data=await response.json().catch(()=>({}));throw new Error(data.error?.message||"Could not delete calendar booking")}
+ return true;
+}
+module.exports={eventsBetween,overlaps,assignedEmployee,createEvent,deleteEvent};
