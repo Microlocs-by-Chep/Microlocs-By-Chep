@@ -2,3 +2,4 @@
 .remember-account input{width:auto!important}
 .delete-booking{margin-top:8px;border:1px solid #b54a3d;background:transparent;color:#a33b30;border-radius:7px;padding:6px 8px;font-size:12px;font-weight:700;cursor:pointer}
 .delete-booking:disabled{opacity:.55;cursor:wait}
+.forgot-password{border:0;background:transparent;color:#8a5d27;padding:8px 0;text-align:left;text-decoration:underline;font:inherit;font-weight:700;cursor:pointer}
