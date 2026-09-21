@@ -1,5 +1,6 @@
 const crypto=require("crypto");
-const CALENDAR_ID=process.env.GOOGLE_CALENDAR_ID;
+// All website bookings belong on the salon calendar customers and staff use.
+const CALENDAR_ID="chepletingbev@gmail.com";
 const EMAIL=process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const PRIVATE_KEY=(process.env.GOOGLE_PRIVATE_KEY||"").replace(/\\n/g,"\n");
 const encode=value=>Buffer.from(JSON.stringify(value)).toString("base64url");
