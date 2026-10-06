@@ -102,8 +102,16 @@ $("#previousCustomers").onclick=()=>{if(customerPage>0){customerPage--;loadCusto
 $("#nextCustomers").onclick=()=>{customerPage++;loadCustomers()};
 let visitorRequest=0;
 async function loadVisitorCounts(){
- if(!session)return;const request=++visitorRequest;$("#visitorsMessage").textContent="Loading visitor counts…";
- try{const counts=await api('/rest/v1/rpc/admin_website_visitors',{method:'POST',headers:{"Content-Type":"application/json"},body:'{}'});if(request!==visitorRequest||!session)return;$("#visitorsToday").textContent=Number(counts.visitors_today).toLocaleString("en-KE");$("#visitorsTotal").textContent=Number(counts.unique_browsers).toLocaleString("en-KE");$("#visitorsMessage").textContent=counts.tracking_since?`Tracking since ${new Date(`${counts.tracking_since}T12:00:00+03:00`).toLocaleDateString("en-KE",{day:"numeric",month:"long",year:"numeric",timeZone:"Africa/Nairobi"})}. Earlier visits are not included.`:"Counting starts with the first website visit after tracking is enabled."}catch(error){if(request!==visitorRequest||!session)return;$("#visitorsToday").textContent="—";$("#visitorsTotal").textContent="—";$("#visitorsMessage").textContent=/admin_website_visitors|schema cache/.test(error.message)?"Visitor counting needs the website visitors database update in Supabase.":"Visitor counts are unavailable. Please try refreshing."}
+ if(!session)return;const request=++visitorRequest,badge=$("#refreshVisitors");badge.title="Loading website visitor count…";
+ try{
+  const counts=await api('/rest/v1/rpc/admin_website_visitors',{method:'POST',headers:{"Content-Type":"application/json"},body:'{}'});
+  if(request!==visitorRequest||!session)return;
+  const total=Number(counts.unique_browsers).toLocaleString("en-KE");$("#visitorsTotal").textContent=total;
+  badge.title=`${total} website visitors since tracking started (approximate browser count). Click to refresh.`;badge.setAttribute("aria-label",`${total} total website visitors. Refresh count`);
+ }catch(error){
+  if(request!==visitorRequest||!session)return;$("#visitorsTotal").textContent="—";
+  badge.title=/admin_website_visitors|schema cache/.test(error.message)?"Visitor counting needs the website visitors database update in Supabase.":"Visitor count unavailable. Click to retry.";badge.setAttribute("aria-label",badge.title);
+ }
 }
 $("#refreshVisitors").onclick=loadVisitorCounts;
 session?.access_token?showDashboard():showLogin();
