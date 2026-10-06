@@ -265,3 +265,6 @@ img,video,iframe{max-width:100%}
 
 /* Keep the celebration in the dialog top layer, in front of the confirmation */
 .booking-confirmation .booking-fireworks{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;z-index:2147483647!important;pointer-events:none!important;overflow:hidden!important}.booking-confirmation>.confirmation-close,.booking-confirmation>.confirmation-check,.booking-confirmation>h3,.booking-confirmation>.confirmation-content,.booking-confirmation>.confirmation-done{position:relative;z-index:1}
+
+/* Booking glitter stays in the dialog top layer and covers the viewport */
+.booking-confirmation .booking-fireworks{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;z-index:999!important;pointer-events:none!important;overflow:hidden!important}
