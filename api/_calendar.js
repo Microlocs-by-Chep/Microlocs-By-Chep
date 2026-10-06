@@ -14,9 +14,15 @@ async function accessToken(){
 async function eventsBetween(start,end){
  const token=await accessToken(),url=new URL("https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(CALENDAR_ID)+"/events");
  url.search=new URLSearchParams({timeMin:start,timeMax:end,singleEvents:"true",orderBy:"startTime",maxResults:"2500"}).toString();
- const response=await fetch(url,{headers:{Authorization:"Bearer "+token}}),data=await response.json();
- if(!response.ok)throw new Error(data.error?.message||"Could not read calendar");
- return (data.items||[]).filter(event=>event.status!=="cancelled"&&event.transparency!=="transparent");
+ const items=[];
+ do{
+  const response=await fetch(url,{headers:{Authorization:"Bearer "+token}}),data=await response.json();
+  if(!response.ok)throw new Error(data.error?.message||"Could not read calendar");
+  items.push(...(data.items||[]));
+  if(!data.nextPageToken)break;
+  url.searchParams.set("pageToken",data.nextPageToken);
+ }while(true);
+ return items.filter(event=>event.status!=="cancelled"&&event.transparency!=="transparent");
 }
 const overlaps=(event,start,end)=>new Date(event.start.dateTime||event.start.date)<end&&new Date(event.end.dateTime||event.end.date)>start;
 const assignedEmployee=event=>{
@@ -35,7 +41,7 @@ async function createEvent(event){
   response=await fetch(url,{method:"POST",headers:{Authorization:"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify(calendarOnly)});data=await response.json();
   if(response.ok)return {...data,invitationSent:false};
  }
- if(!response.ok)throw new Error(data.error?.message||"Could not create calendar booking");return {...data,invitationSent:Boolean(event.attendees?.length)};
+ if(!response.ok)throw Object.assign(new Error(data.error?.message||"Could not create calendar booking"),{calendarWriteRejected:response.status>=400&&response.status<500});return {...data,invitationSent:Boolean(event.attendees?.length)};
 }
 async function deleteEvent(eventId){
  const token=await accessToken(),url=new URL("https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(CALENDAR_ID)+"/events/"+encodeURIComponent(eventId));
@@ -44,4 +50,41 @@ async function deleteEvent(eventId){
  if(!response.ok&&response.status!==404){const data=await response.json().catch(()=>({}));throw new Error(data.error?.message||"Could not delete calendar booking")}
  return true;
 }
-module.exports={eventsBetween,overlaps,assignedEmployee,createEvent,deleteEvent};
+// One persistent, transparent event coordinates writes across serverless instances.
+// Conditional ETag updates claim/release it atomically. Never expire a held lock:
+// a slow or interrupted writer must not race with another appointment writer.
+const LOCK_ID="microlocsbookinglock";
+const conflict=message=>Object.assign(new Error(message),{statusCode:409});
+async function withCalendarLock(operation){
+ const token=await accessToken();
+ const base="https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(CALENDAR_ID)+"/events";
+ const url=base+"/"+LOCK_ID;
+ const headers={Authorization:"Bearer "+token,"Content-Type":"application/json"};
+ let response=await fetch(url,{headers}),lock=await response.json();
+ if(response.status===404){
+  const created=await fetch(base+"?sendUpdates=none",{method:"POST",headers,body:JSON.stringify({id:LOCK_ID,summary:"Website booking coordination — do not delete",description:"Internal booking lock. A held lock after an interrupted request must be reviewed before resetting; never reset while a booking writer is running.",transparency:"transparent",start:{dateTime:"2000-01-01T00:00:00Z"},end:{dateTime:"2000-01-01T00:01:00Z"},extendedProperties:{private:{lockOwner:""}}})});
+  if(!created.ok&&created.status!==409)throw new Error("Could not initialize booking protection");
+  response=await fetch(url,{headers});lock=await response.json();
+ }
+ if(!response.ok||!lock.etag)throw new Error("Could not read booking protection");
+ if(lock.extendedProperties?.private?.lockOwner)throw conflict("The booking calendar is busy. Please try again shortly. If this continues, contact the salon.");
+ const owner=crypto.randomUUID();
+ response=await fetch(url,{method:"PATCH",headers:{...headers,"If-Match":lock.etag},body:JSON.stringify({extendedProperties:{private:{lockOwner:owner,lockedAt:new Date().toISOString()}}})});
+ if(response.status===412||response.status===409)throw conflict("Another booking is being saved. Please refresh available times and try again.");
+ const held=await response.json();
+ if(!response.ok||!held.etag||held.extendedProperties?.private?.lockOwner!==owner)throw new Error("Could not protect this booking. Please try again.");
+ let safeToRelease=false;
+ try{const result=await operation();safeToRelease=true;return result}catch(error){
+  safeToRelease=[400,404,409].includes(error.statusCode)||error.calendarWriteRejected===true;
+  throw error;
+ }finally{
+  if(!safeToRelease){console.error("Booking protection needs review: request outcome is uncertain; lock retained")}else{
+  // Failed release leaves the calendar closed to new writes rather than permitting a race.
+  try{
+   const released=await fetch(url,{method:"PATCH",headers:{...headers,"If-Match":held.etag},body:JSON.stringify({extendedProperties:{private:{lockOwner:"",lockedAt:""}}})});
+   if(!released.ok)console.error("Booking protection needs review: lock release failed");
+  }catch{console.error("Booking protection needs review: lock release failed")}
+  }
+ }
+}
+module.exports={eventsBetween,overlaps,assignedEmployee,createEvent,deleteEvent,withCalendarLock};

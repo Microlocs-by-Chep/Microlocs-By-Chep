@@ -4,9 +4,9 @@ const clean=value=>String(value||"").replace(/[\\;,\n]/g,character=>({"\\":"\\\\
 const stamp=date=>new Date(date).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
 const htmlEscape=value=>String(value||"").replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[character]));
 
-async function sendBookingConfirmation({eventId,name,email,phone,service,employee,begins,ends,dateLabel,timeLabel}){
+async function sendBookingConfirmation({eventId,name,email,phone,service,employee,begins,ends,dateLabel,timeLabel,description}){
  if(!process.env.RESEND_API_KEY)return false;
- const details=`Service: ${service}\nStylist: ${employee}\nPhone: ${phone}`;
+ const details=description||`Service: ${service}\nStylist: ${employee}\nPhone: ${phone}`;
  const uid=`${eventId||Date.now()}@microlocsbychep.com`;
  const ics=[
   "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Microlocs by Chep//Bookings//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH",
