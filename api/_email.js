@@ -27,4 +27,15 @@ async function sendBookingConfirmation({eventId,name,email,phone,service,employe
  return response.ok;
 }
 
-module.exports={sendBookingConfirmation};
+async function sendSalonBookingNotification({eventId,name,email,service,employee,dateLabel,timeLabel,description}){
+ if(!process.env.RESEND_API_KEY)return false;
+ const recipient=process.env.BOOKING_NOTIFICATION_EMAIL||"chepletingbev@gmail.com";
+ const response=await fetch("https://api.resend.com/emails",{
+  method:"POST",headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`,"Content-Type":"application/json","Idempotency-Key":`salon-booking-${eventId}`},
+  body:JSON.stringify({from:FROM,to:[recipient],reply_to:email,subject:`New ${service} booking — ${name}`.replace(/[\r\n]/g," "),
+   text:`New booking\n${dateLabel} at ${timeLabel}\nStylist: ${employee}\n\n${description}`,
+   html:`<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#211b18"><h1>New booking</h1><p><strong>${htmlEscape(dateLabel)} at ${htmlEscape(timeLabel)}</strong><br>Stylist: ${htmlEscape(employee)}</p><div style="background:#f7f2eb;padding:20px;border-radius:12px;white-space:pre-wrap;line-height:1.7">${htmlEscape(description)}</div><p>Reply to this email to contact the customer.</p></div>`})
+ });
+ return response.ok;
+}
+module.exports={sendBookingConfirmation,sendSalonBookingNotification};

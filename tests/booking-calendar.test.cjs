@@ -24,7 +24,7 @@ test('all selected service options and estimate reach the salon calendar',async(
 test('specialty preferences and identical details reach emailed Google link and ICS',async()=>{
  const previousFetch=global.fetch,previousKey=process.env.RESEND_API_KEY;
  let sent;process.env.RESEND_API_KEY='local-test-only';
- global.fetch=async(url,options)=>{assert.equal(url,'https://api.resend.com/emails');sent=JSON.parse(options.body);return {ok:true}};
+ global.fetch=async(url,options)=>{assert.equal(url,'https://api.resend.com/emails');const message=JSON.parse(options.body);if(message.to.includes("test@example.com"))sent=message;return {ok:true}};
  try{
   const res=await reserve({service:'Microtwists',duration:6,specialtyLength:'Long',specialtyVolume:'Full',notes:'Keep ends loose',estimatedTotal:20000});
   assert.equal(res.body.emailSent,true);

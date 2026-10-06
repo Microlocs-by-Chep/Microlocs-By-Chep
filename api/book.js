@@ -1,6 +1,6 @@
 const {eventsBetween,createEvent,withCalendarLock}=require("./_calendar");
 const {remainingCapacity}=require("./_booking-availability");
-const {sendBookingConfirmation}=require("./_email");
+const {sendBookingConfirmation,sendSalonBookingNotification}=require("./_email");
 module.exports=async(req,res)=>{
  if(req.method!=="POST")return res.status(405).json({error:"Method not allowed"});
  try{
@@ -21,7 +21,10 @@ module.exports=async(req,res)=>{
    return createEvent({summary:`${service} — ${name}`,description,start:{dateTime:begins.toISOString(),timeZone:"Africa/Nairobi"},end:{dateTime:ends.toISOString(),timeZone:"Africa/Nairobi"},attendees:[{email:customerEmail,displayName:name}],guestsCanModify:false,guestsCanInviteOthers:false,extendedProperties:{private:{employee}}});
   });
   const dateLabel=begins.toLocaleDateString("en-KE",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"Africa/Nairobi"}),timeLabel=begins.toLocaleTimeString("en-KE",{hour:"numeric",minute:"2-digit",timeZone:"Africa/Nairobi"});
-  let emailSent=false;try{emailSent=await sendBookingConfirmation({eventId:event.id,name,email:customerEmail,phone,service,employee,begins,ends,dateLabel,timeLabel,description})}catch{}
-  return res.status(201).json({dateLabel,timeLabel,calendarSaved:true,calendarEventId:event.id,calendarLink:event.htmlLink||null,invitationSent:event.invitationSent,emailSent});
+  const notification={eventId:event.id,name,email:customerEmail,phone,service,employee,begins,ends,dateLabel,timeLabel,description};
+  const results=await Promise.allSettled([sendBookingConfirmation(notification),sendSalonBookingNotification(notification)]);
+  const emailSent=results[0].status==="fulfilled"&&results[0].value===true,salonEmailSent=results[1].status==="fulfilled"&&results[1].value===true;
+  if(process.env.RESEND_API_KEY&&!salonEmailSent)console.error("Salon booking notification could not be sent; the calendar booking is saved.");
+  return res.status(201).json({dateLabel,timeLabel,calendarSaved:true,calendarEventId:event.id,calendarLink:event.htmlLink||null,invitationSent:event.invitationSent,emailSent,salonEmailSent});
  }catch(error){return res.status(error.statusCode||503).json({error:error.message})}
 };
