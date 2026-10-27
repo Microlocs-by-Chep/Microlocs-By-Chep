@@ -10,6 +10,17 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.microlocsbychep.com"
+        }
+      ],
+      "destination": "https://microlocsbychep.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
