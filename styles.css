@@ -278,3 +278,6 @@ img,video,iframe{max-width:100%}
 @media(max-height:600px) and (max-width:900px){.booking-modal-card,.service-options-card{padding-top:58px}.booking-confirmation{max-height:96vh;padding-top:28px}}
 @supports not (height:100dvh){.booking-modal-card,.service-options-card,.about-modal-card{height:100vh}.booking-confirmation .booking-fireworks{height:100vh!important}}
 @media(prefers-reduced-motion:reduce){.booking-fireworks{display:none!important}.banner,.client-card,*{scroll-behavior:auto!important}}
+
+/* Keep client work discoverable as real images while preserving carousel frames. */
+.client-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.client-card>span{z-index:1}

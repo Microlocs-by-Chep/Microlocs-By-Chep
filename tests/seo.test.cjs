@@ -86,3 +86,17 @@ test('service guides resolve business identity and accurately describe the offer
  assert.match(read('microlocs-installation-nairobi.html'),/<caption>Microlocs by Chep installation estimates<\/caption>/);
  assert.match(read('microlocs-vs-sisterlocks.html'),/href="https:\/\/www.sisterlocks.com\/"/);
 });
+
+
+test('client results expose real lazy-loaded images before JavaScript runs',()=>{
+ const gallery=read('index.html').match(/id="clientCarousel">(.*?)<\/div><button class="arrow next"/s)[1];
+ const images=[...gallery.matchAll(/<img ([^>]+)>/g)];
+ assert.equal(images.length,12);
+ for(const [,attributes] of images){
+  assert.match(attributes,/alt="[^"]+"/);assert.match(attributes,/loading="lazy"/);
+  assert.match(attributes,/width="\d+"/);assert.match(attributes,/height="\d+"/);
+  const file=attributes.match(/src="([^"]+)"/)[1];assert.ok(fs.existsSync(path.join(root,file)));
+ }
+ assert.match(read('script.js'),/renderClientPhotos\(data.posts\)/);
+ assert.doesNotMatch(read('script.js'),/clientCarousel.innerHTML=data.posts/);
+});
