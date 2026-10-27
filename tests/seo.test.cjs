@@ -100,3 +100,16 @@ test('client results expose real lazy-loaded images before JavaScript runs',()=>
  assert.match(read('script.js'),/renderClientPhotos\(data.posts\)/);
  assert.doesNotMatch(read('script.js'),/clientCarousel.innerHTML=data.posts/);
 });
+
+
+test('the existing care guide is crawlable without JavaScript and keeps its controls',()=>{
+ const html=read('index.html'),script=read('script.js');
+ assert.equal([...html.matchAll(/id="loc-stages"/g)].length,1);
+ assert.ok(html.indexOf('id="loc-stages"')<html.indexOf('</main>'));
+ for(const heading of ['The sprouting stage','The baby stage','The adolescent stage','The teen stage','The adult stage','The mature stage'])assert.ok(html.includes(heading));
+ assert.match(html,/<noscript><style>.*journey-stages/s);
+ assert.match(script,/const journeyArticle=document.querySelector\("#loc-stages"\)/);
+ assert.match(script,/const contactHub=document.querySelector\("#contact"\)/);
+ assert.doesNotMatch(script,/journeyArticle.innerHTML/);
+ assert.match(script,/guideButton.onclick=/);
+});
