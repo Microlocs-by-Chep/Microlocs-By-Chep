@@ -72,3 +72,17 @@ test('guide structured data identifies the page and factual business without inv
  assert.ok(config.redirects.some(r=>r.source==='/index.html'&&r.destination==='/'&&r.permanent));
  assert.ok(config.headers.some(r=>r.source==='/admin'&&r.headers.some(h=>h.key==='X-Robots-Tag'&&h.value.includes('noindex'))));
 });
+
+test('service guides resolve business identity and accurately describe the offered method',()=>{
+ const homeGraph=JSON.parse(read('index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
+ const business=homeGraph.find(e=>e['@type']==='HairSalon');
+ assert.doesNotMatch(business.description,/sister loc installations/i);
+ for(const {file} of pages.filter(p=>p.file!=='index.html')){
+  const graph=JSON.parse(read(file).match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
+  assert.deepEqual(graph.find(e=>e['@type']==='HairSalon'),business);
+  assert.ok(graph.some(e=>e['@type']==='WebSite'));
+  for(const service of graph.filter(e=>e['@type']==='Service'))assert.equal(service.provider['@id'],business['@id']);
+ }
+ assert.match(read('microlocs-installation-nairobi.html'),/<caption>Microlocs by Chep installation estimates<\/caption>/);
+ assert.match(read('microlocs-vs-sisterlocks.html'),/href="https:\/\/www.sisterlocks.com\/"/);
+});
