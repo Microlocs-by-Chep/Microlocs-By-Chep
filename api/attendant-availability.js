@@ -1,3 +1,4 @@
+const {ACTIVE_STAFF,DISABLED_STAFF}=require("./_staff");
 const {requireAdmin}=require('./_admin-auth');
 const {eventsBetween,assignedEmployee,overlaps,createEvent,deleteEvent,withCalendarLock}=require('./_calendar');
 const {isUnavailability}=require('./_booking-availability');
@@ -6,7 +7,8 @@ module.exports=async(req,res)=>{
  try{
   await requireAdmin(req);
   const {employee,start,end,reason='',id}=req.body||{};
-  if(!['Bree','Joan','Chep'].includes(employee))return res.status(400).json({error:'Choose an attendant'});
+  if(req.method==='POST'&&DISABLED_STAFF.includes(employee))return res.status(409).json({error:'Chep is disabled for bookings.'});
+  if(![...ACTIVE_STAFF,...DISABLED_STAFF].includes(employee))return res.status(400).json({error:'Choose an attendant'});
   const begins=new Date(start),ends=new Date(end);
   if(!Number.isFinite(+begins)||!Number.isFinite(+ends)||ends<=begins||(req.method==='POST'&&ends<=Date.now())||ends-begins>366*86400000)return res.status(400).json({error:'Choose a valid upcoming start and end time (up to one year)'});
   if(req.method==='DELETE'&&(!id||typeof id!=='string'||id.length>1024))return res.status(400).json({error:'Choose an unavailable period to remove'});

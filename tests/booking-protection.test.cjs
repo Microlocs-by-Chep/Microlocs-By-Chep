@@ -53,7 +53,7 @@ test('concurrent same-attendant requests save exactly one appointment',async()=>
 test('no more than two simultaneous appointments across attendants',async()=>{
  await inCalendar([],async fake=>{
   assert.equal((await call(book,'POST',base)).code,201);
-  const results=await Promise.all(['Joan','Chep'].map(employee=>call(book,'POST',{...base,employee})));
+  const results=await Promise.all(['Joan','Joan'].map(employee=>call(book,'POST',{...base,employee})));
   assert.deepEqual(results.map(res=>res.code).sort(),[201,409]);
   assert.equal([...fake.events.values()].filter(event=>event.id!==LOCK).length,2);
  });
@@ -96,5 +96,15 @@ test('uncertain write outcome retains the lock instead of risking a double booki
   try{await assert.rejects(calendar.withCalendarLock(async()=>{throw new Error('connection lost during insert')}),/connection lost/)}finally{console.error=prior}
   assert.ok(fake.events.get(LOCK).extendedProperties.private.lockOwner);
   await assert.rejects(calendar.withCalendarLock(async()=>{}),/calendar is busy/);
+ });
+});
+
+test('disabled Chep cannot receive slots or bookings and does not create calendar records',async()=>{
+ await inCalendar([],async fake=>{
+  const booking=await call(book,'POST',{...base,employee:'Chep'});
+  assert.equal(booking.code,409);assert.match(booking.body.error,/unavailable/);
+  const slots=await call(availability,'GET',null,{date:'2099-01-12',duration:'3',employee:'Chep'});
+  assert.equal(slots.code,409);assert.ok(!slots.body.slots);
+  assert.equal(fake.events.size,0);
  });
 });

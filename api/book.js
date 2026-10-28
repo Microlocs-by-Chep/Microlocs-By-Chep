@@ -1,3 +1,4 @@
+const {ACTIVE_STAFF,DISABLED_STAFF}=require("./_staff");
 const {eventsBetween,createEvent,withCalendarLock}=require("./_calendar");
 const {remainingCapacity}=require("./_booking-availability");
 const {sendBookingConfirmation,sendSalonBookingNotification}=require("./_email");
@@ -5,7 +6,8 @@ module.exports=async(req,res)=>{
  if(req.method!=="POST")return res.status(405).json({error:"Method not allowed"});
  try{
   const {name,email,phone,notes="",service,employee,duration,start,hairLength="",hairVolume="",extensionInches="",extensionVolume="",colour="",beverage="",specialtyLength="",specialtyVolume="",addExtensions="",addColouring="",estimatedTotal=null}=req.body||{},hours=Number(duration),customerEmail=String(email||"").trim().toLowerCase();
-  if(!name||!phone||!/^\S+@\S+\.\S+$/.test(customerEmail)||!["Retie","Installation","Microtwists","Microbraiding","Consultation"].includes(service)||!["Bree","Joan","Chep"].includes(employee)||![1,3,6,8].includes(hours)||!start)return res.status(400).json({error:"Complete all booking details, including a valid email address"});
+  if(DISABLED_STAFF.includes(employee))return res.status(409).json({error:"Chep is unavailable for bookings. Please select Bree or Joan."});
+  if(!name||!phone||!/^\S+@\S+\.\S+$/.test(customerEmail)||!["Retie","Installation","Microtwists","Microbraiding","Consultation"].includes(service)||!ACTIVE_STAFF.includes(employee)||![1,3,6,8].includes(hours)||!start)return res.status(400).json({error:"Complete all booking details, including a valid email address"});
   const begins=new Date(start),ends=new Date(begins.getTime()+hours*3600000);
   if(!Number.isFinite(begins.getTime())||begins<Date.now())return res.status(400).json({error:"Choose a future appointment"});
   const details=[`Customer: ${name}`,`Email: ${customerEmail}`,`Phone: ${phone}`,`Service: ${service}`,`Duration: ${hours} hours`,`Stylist: ${employee}`,`Complimentary drink: ${beverage||"Not selected"}`];

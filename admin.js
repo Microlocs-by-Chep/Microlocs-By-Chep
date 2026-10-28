@@ -65,7 +65,7 @@ async function changeAvailability(method,body){
  const response=await fetch('/api/attendant-availability',{method,headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify(body)}),data=await response.json();if(!response.ok)throw new Error(data.error||"Could not update availability");return data;
 }
 function renderUnavailable(periods){
- const summary=["Bree","Joan","Chep"].map(employee=>{const count=periods.filter(period=>period.employee===employee).length;return `${employee}: ${count?`${count} unavailable period${count===1?"":"s"}`:"no unavailable periods"}`}).join(" · ");
+ const summary=["Bree","Joan"].map(employee=>{const count=periods.filter(period=>period.employee===employee).length;return `${employee}: ${count?`${count} unavailable period${count===1?"":"s"}`:"no unavailable periods"}`}).join(" · ");
  $("#availabilityOverview").textContent=summary+" this week";
  const format=value=>new Date(value).toLocaleString("en-KE",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit",timeZone:"Africa/Nairobi"});
  $("#unavailablePeriods").innerHTML=periods.length?periods.map((period,index)=>`<article class="unavailable-period"><div><strong>${escapeHtml(period.employee)}</strong><p>${format(period.start)} – ${format(period.end)}</p>${period.reason&&period.reason!=="Not provided"?`<small>${escapeHtml(period.reason)}</small>`:""}</div><button type="button" data-restore-availability="${index}">Make available</button></article>`).join(""):'<p class="no-booking">No unavailable periods this week.</p>';

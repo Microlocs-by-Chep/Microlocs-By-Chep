@@ -281,3 +281,5 @@ img,video,iframe{max-width:100%}
 
 /* Keep client work discoverable as real images while preserving carousel frames. */
 .client-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.client-card>span{z-index:1}
+
+.employee-options button:disabled{opacity:.5;cursor:not-allowed;background:#f4f1ed;color:#766;box-shadow:none}.employee-options button:disabled::before{background:#999}

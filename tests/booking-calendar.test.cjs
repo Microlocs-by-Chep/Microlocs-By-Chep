@@ -7,7 +7,7 @@ require.cache[calendarPath]={id:calendarPath,filename:calendarPath,loaded:true,e
  createEvent:async value=>{event=value;return {id:'test-event',invitationSent:false}}
 }};
 const book=require('../api/book');
-const base={name:'Test client',email:'test@example.com',phone:'0700000000',service:'Retie',employee:'Chep',duration:3,start:'2099-01-12T05:00:00Z',beverage:'Tea'};
+const base={name:'Test client',email:'test@example.com',phone:'0700000000',service:'Retie',employee:'Joan',duration:3,start:'2099-01-12T05:00:00Z',beverage:'Tea'};
 async function reserve(extra={}){
  const res={status(code){this.code=code;return this},json(body){this.body=body;return this}};
  await book({method:'POST',body:{...base,...extra}},res);assert.equal(res.code,201);return res;
@@ -15,7 +15,7 @@ async function reserve(extra={}){
 test('drink is saved and irrelevant unselected options are omitted',async()=>{
  await reserve();assert.match(event.description,/Complimentary drink: Tea/);
  assert.doesNotMatch(event.description,/Hair length:|Extension inches:|Estimated booking total:/);
- assert.match(event.description,/Stylist: Chep/);
+ assert.match(event.description,/Stylist: Joan/);
 });
 test('all selected service options and estimate reach the salon calendar',async()=>{
  await reserve({service:'Installation',duration:8,hairLength:'Long',hairVolume:'Full / bulky',addExtensions:'Yes',extensionInches:'20 inches',extensionVolume:'Medium',addColouring:'Yes',colour:'Copper',notes:'Sensitive scalp',estimatedTotal:49500});

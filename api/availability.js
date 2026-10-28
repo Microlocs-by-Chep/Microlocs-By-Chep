@@ -1,8 +1,10 @@
+const {ACTIVE_STAFF,DISABLED_STAFF}=require("./_staff");
 const {eventsBetween}=require("./_calendar");
 const {remainingCapacity}=require("./_booking-availability");
 module.exports=async(req,res)=>{
  try{
-  const {date,duration,employee}=req.query,hours=Number(duration),employees=["Bree","Joan","Chep"];
+  const {date,duration,employee}=req.query,hours=Number(duration),employees=ACTIVE_STAFF;
+  if(DISABLED_STAFF.includes(employee))return res.status(409).json({error:"Chep is unavailable for bookings. Please select Bree or Joan."});
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date||"")||![1,3,6,8].includes(hours)||!employees.includes(employee))return res.status(400).json({error:"Choose a valid service and date"});
   const dayStart=new Date(date+"T08:00:00+03:00"),dayEnd=new Date(date+"T21:00:00+03:00"),events=await eventsBetween(dayStart.toISOString(),dayEnd.toISOString()),slots=[];
   for(let hour=8;hour<=17&&hour+hours<=21;hour++){const start=new Date(date+`T${String(hour).padStart(2,"0")}:00:00+03:00`),end=new Date(start.getTime()+hours*3600000),available=remainingCapacity(events,start,end,employee);if(available>0)slots.push({start:start.toISOString(),label:start.toLocaleTimeString("en-KE",{hour:"numeric",minute:"2-digit",timeZone:"Africa/Nairobi"}),available})}

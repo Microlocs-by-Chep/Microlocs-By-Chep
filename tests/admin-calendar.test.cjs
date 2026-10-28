@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 let events=[],reads=0;
 const calendarPath=require.resolve('../api/_calendar');
-require.cache[calendarPath]={id:calendarPath,filename:calendarPath,loaded:true,exports:{eventsBetween:async()=>{reads++;return events},assignedEmployee:()=> 'Chep'}};
+require.cache[calendarPath]={id:calendarPath,filename:calendarPath,loaded:true,exports:{eventsBetween:async()=>{reads++;return events},assignedEmployee:event=>event.extendedProperties?.private?.employee||'Joan'}};
 const handler=require('../api/admin-calendar');
 const event=description=>({id:'test-event',summary:'Retie — Test client',description,start:{dateTime:'2020-01-06T05:00:00Z'},end:{dateTime:'2020-01-06T08:00:00Z'}});
 async function request(authorized=true){
@@ -16,7 +16,7 @@ async function request(authorized=true){
 test('admin gets drink and selected options; completed job uses existing schema',async()=>{
  events=[event('Customer: Test client\nEmail: test@example.com\nService: Installation\nDuration: 8 hours\nComplimentary drink: Coffee\nHair length: Long\nHair volume: Full / bulky\nAdd extensions: Yes\nExtension inches: 20 inches\nAdd colouring: Yes\nColour: Copper\nHair details: Sensitive scalp\nEstimated booking total: KSh 49,500')];
  const res=await request();assert.equal(res.code,200);
- const booking=res.body.calendar[0];assert.equal(booking.beverage,'Coffee');assert.equal(booking.stylist,'Chep');assert.equal(booking.hair_details,'Sensitive scalp');
+ const booking=res.body.calendar[0];assert.equal(booking.beverage,'Coffee');assert.equal(booking.stylist,'Joan');assert.equal(booking.hair_details,'Sensitive scalp');
  assert.deepEqual(booking.booking_options.map(x=>x.label),['Duration','Hair length','Hair volume','Add extensions','Extension inches','Add colouring','Colour','Estimated booking total']);
  const job=res.body.jobs[0];assert.match(job.booking_notes,/Complimentary drink: Coffee/);assert.match(job.booking_notes,/Colour: Copper/);
  for(const key of ['beverage','booking_options','hair_details','stylist','starts_at','completed'])assert.ok(!(key in job),key+' must not be sent to commission_jobs');
@@ -43,7 +43,7 @@ test('admin calendar renders drink, options, notes, and correct stylist safely',
 });
 
 test('unavailable periods appear separately and never become commission jobs',async()=>{
- const blocked=event('Stylist: Chep\nReason: Day off');blocked.extendedProperties={private:{employee:'Chep',kind:'unavailability'}};
+ const blocked=event('Stylist: Joan\nReason: Day off');blocked.extendedProperties={private:{employee:'Joan',kind:'unavailability'}};
  events=[blocked];const res=await request();assert.equal(res.code,200);assert.equal(res.body.calendar.length,0);assert.equal(res.body.jobs.length,0);assert.equal(res.body.unavailable[0].reason,'Day off');
 });
 test('admin renders unavailable periods with a make-available action and escaped reasons',()=>{
@@ -63,4 +63,14 @@ test('admin customer list and account history escape names, drinks and notes',()
 test('admin account does not report zero points or empty history when calendar is unavailable',()=>{
  const {context,node}=adminContext();context.account={customer:{email:'test@example.com',full_name:'Client'},appointments:null,points:null,historyError:'Google Calendar is not connected yet'};
  vm.runInContext('renderCustomerAccount(account)',context);const html=node('#customerAccountDetail').innerHTML;assert.match(html,/Client/);assert.match(html,/Unavailable/);assert.match(html,/not connected/);assert.ok(!html.includes('No appointments in this period.'));
+});
+
+test('Chep is hidden from the calendar but existing completed-job history is preserved',async()=>{
+ const historical=event('Customer: Existing client\nStylist: Chep');historical.extendedProperties={private:{employee:'Chep'}};
+ events=[historical];const res=await request();assert.equal(res.code,200);
+ assert.deepEqual(res.body.calendar,[]);assert.equal(res.body.jobs.length,1);
+ assert.match(res.body.jobs[0].booking_notes,/Stylist: Chep/);
+ const script=fs.readFileSync(require.resolve('../script.js'),'utf8');
+ assert.ok(script.includes('data-employee=\\"Chep\\" disabled aria-disabled=\\"true\\"'));
+ assert.ok(script.includes('<strong>Chep</strong><small>Unavailable</small>'));
 });
